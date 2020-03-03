@@ -1,13 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-/**
-//#include "Defs.h"
-#include "Factorial.h"
-#include "Change.h"
-#include "Sum.h"
-#include "Partitioning.h"
-*/
 
 #include "Sudoku.h"
 #include "Labirinth.h"
