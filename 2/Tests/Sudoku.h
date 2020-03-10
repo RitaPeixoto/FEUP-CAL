@@ -19,13 +19,13 @@ using namespace std;
 class Sudoku
 {
 	/**
-	 * numbers[i][j] - número que ocupa a linha i, coluna j (de 0 a 8)
-	 * 0 quer dizer não preenchido.
+	 * numbers[i][j] - nï¿½mero que ocupa a linha i, coluna j (de 0 a 8)
+	 * 0 quer dizer nï¿½o preenchido.
 	 */
 	int numbers[9][9];
 
 	/**
-	 * Informação derivada da anterior, para acelerar processamento (número de 1 a 9, nao usa 0)
+	 * Informaï¿½ï¿½o derivada da anterior, para acelerar processamento (nï¿½mero de 1 a 9, nao usa 0)
 	 */
 	int countFilled;
 	bool columnHasNumber[9][10];
@@ -40,9 +40,9 @@ public:
 	Sudoku();
 
 	/**
-	 * Inicia um Sudoku com um conteúdo inicial.
-	 * Lança excepção IllegalArgumentException se os valores
-	 * estiverem fora da gama de 1 a 9 ou se existirem números repetidos
+	 * Inicia um Sudoku com um conteï¿½do inicial.
+	 * Lanï¿½a excepï¿½ï¿½o IllegalArgumentException se os valores
+	 * estiverem fora da gama de 1 a 9 ou se existirem nï¿½meros repetidos
 	 * por linha, coluna ou bloc 3x3.
 	 *
 	 * @param nums matriz com os valores iniciais (0 significa por preencher)
@@ -50,23 +50,23 @@ public:
 	Sudoku(int nums[9][9]);
 
 	/**
-	 * Obtem o conteúdo actual (só para leitura!).
+	 * Obtem o conteï¿½do actual (sï¿½ para leitura!).
 	 */
 	int** getNumbers();
 
 
 	/**
-	 * Verifica se o Sudoku já está completamente resolvido
+	 * Verifica se o Sudoku jï¿½ estï¿½ completamente resolvido
 	 */
 	bool isComplete();
 
 
 	/**
 	 * Resolve o Sudoku.
-	 * Retorna indicação de sucesso ou insucesso (sudoku impossível).
+	 * Retorna indicaï¿½ï¿½o de sucesso ou insucesso (sudoku impossï¿½vel).
 	 */
 	bool solve();
-
+    bool Possible(int row, int col, int n);
 
 	/**
 	 * Imprime o Sudoku.

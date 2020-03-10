@@ -92,27 +92,43 @@ bool Sudoku::isComplete()
  * Resolve o Sudoku.
  * Retorna indica��o de sucesso ou insucesso (sudoku imposs�vel).
  */
-bool Sudoku::solve()
-{
-    if(isComplete()){
-        print();
+bool Sudoku::solve(){
+    if(isComplete())
         return true;
-    }
     for(int i=0; i<9;i++){
         for(int j=0; j<9;j++){
-            if(!columnHasNumber[i][j]){
-                if(!lineHasNumber[i][j]){
-                    if(!block3x3HasNumber[i][j])
+            if(numbers[i][j]==0){
+                for(int n=1; n<=9; n++){
+                    if(Possible(i,j,n)){
+                        numbers[i][j]=n;
+                        countFilled++;
+                        columnHasNumber[j][n] = true;
+                        lineHasNumber[i][n] =true;
+                        block3x3HasNumber[i/3][j/3][n]=true;
+
+                        if(solve())
+                            return true;
+                        else{
+                            numbers[i][j]=0;
+                            countFilled--;
+                            columnHasNumber[j][n] = false;
+                            lineHasNumber[i][n] = false;
+                            block3x3HasNumber[i/3][j/3][n] = false;
+                        }
+                    }
                 }
+                return false;
             }
+
         }
+
     }
-
-
-	return false;
+    return isComplete();
 }
 
-
+bool Sudoku::Possible(int row, int col, int n){
+    return !lineHasNumber[row][n] && !columnHasNumber[col][n] && !block3x3HasNumber[row/3][col/3][n];
+}
 
 /**
  * Imprime o Sudoku.
