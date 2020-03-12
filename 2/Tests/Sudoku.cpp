@@ -119,9 +119,7 @@ bool Sudoku::solve(){
                 }
                 return false;
             }
-
         }
-
     }
     return isComplete();
 }

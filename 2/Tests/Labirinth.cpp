@@ -41,6 +41,11 @@ void  Labirinth::printLabirinth()
 //alinea a
 bool Labirinth::findGoal(int x, int y)
 {
+    static bool initialized = false;
+    if(!initialized){
+        initializeVisited();
+        initialized=true;
+    }
     bool found=false;
     visited[x][y]= true;
     if(labirinth[x][y]==2){//exit
