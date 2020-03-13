@@ -207,6 +207,8 @@ TEST(CAL_FP02, testSudokuWithMultipleSolutions) {
              {3, 2, 0, 0, 0, 0, 0, 0, 6}};
 
     Sudoku s(in);
+    Sudoku aux(in);
+    aux.solve2();
     EXPECT_EQ(s.solve() && s.isComplete(), true);
     int** out = s.getNumbers();
     for (int i=0; i<9; i++)
@@ -247,6 +249,8 @@ TEST(CAL_FP02, testSudokuImpossible) {
              {3, 2, 0, 0, 0, 0, 0, 0, 6}};
 
     Sudoku s(in);
+    Sudoku aux(in);
+    aux.solve2();
     EXPECT_EQ(s.solve(), false);
 
     int out[9][9];

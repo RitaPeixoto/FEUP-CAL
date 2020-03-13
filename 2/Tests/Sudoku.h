@@ -31,6 +31,8 @@ class Sudoku
 	bool columnHasNumber[9][10];
 	bool lineHasNumber[9][10];
 	bool block3x3HasNumber[3][3][10];
+	int sol;
+	int init;
 
 	void initialize();
 
@@ -66,6 +68,7 @@ public:
 	 * Retorna indica��o de sucesso ou insucesso (sudoku imposs�vel).
 	 */
 	bool solve();
+    bool solve2();
     bool Possible(int row, int col, int n);
 
 	/**

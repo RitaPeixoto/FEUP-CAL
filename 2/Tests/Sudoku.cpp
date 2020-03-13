@@ -36,6 +36,7 @@ Sudoku::Sudoku(int nums[9][9])
 				columnHasNumber[j][n] = true;
 				block3x3HasNumber[i / 3][j / 3][n] = true;
 				countFilled++;
+				init++;
 			}
 		}
 	}
@@ -43,6 +44,8 @@ Sudoku::Sudoku(int nums[9][9])
 
 void Sudoku::initialize()
 {
+    sol =0;
+    init =0;
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 9; j++)
@@ -123,6 +126,45 @@ bool Sudoku::solve(){
     }
     return isComplete();
 }
+
+bool Sudoku::solve2(){
+    if(isComplete()){
+        sol ++;
+        return true;
+    }
+
+    for(int i=0; i<9;i++){
+        for(int j=0; j<9;j++){
+            if(numbers[i][j]==0){
+                for(int n=1; n<=9; n++){
+                    if(Possible(i,j,n)){
+                        numbers[i][j]=n;
+                        countFilled++;
+                        columnHasNumber[j][n] = true;
+                        lineHasNumber[i][n] =true;
+                        block3x3HasNumber[i/3][j/3][n]=true;
+
+                        solve2();
+                        numbers[i][j]=0;
+                        countFilled--;
+                        columnHasNumber[j][n] = false;
+                        lineHasNumber[i][n] = false;
+                        block3x3HasNumber[i/3][j/3][n] = false;
+                        }
+                    }
+                if(countFilled == init){
+                    cout << "Number of solutions: "<<sol<<endl;
+                    return sol>0;
+                }
+                else
+                  return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 
 bool Sudoku::Possible(int row, int col, int n){
     return !lineHasNumber[row][n] && !columnHasNumber[col][n] && !block3x3HasNumber[row/3][col/3][n];
