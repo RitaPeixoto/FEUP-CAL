@@ -74,7 +74,7 @@ Result nearestPoints_BF_SortByX(vector<Point> &vp) {
 static void npByY(vector<Point> &vp, int left, int right, Result &res)
 {
 	for(int i = left; i<= right; i++){
-	    for(int j= left+1; j<=right; j++){
+	    for(int j= i+1; j<=right; j++){
 	        double distance = vp[i].distance(vp[j]);
 	        if(distance>=res.dmin){
 	            break;
