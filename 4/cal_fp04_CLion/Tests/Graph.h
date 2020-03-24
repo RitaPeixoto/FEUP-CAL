@@ -292,8 +292,28 @@ vector<T> Graph<T>::bfs(const T & source) const {
 11. discovered(w)  true
 12. post-process(v)*/
 	vector<T> res;
+    typename vector <Vertex<T>*> ::  const_iterator it= vertexSet.begin();
+    while(it!=vertexSet.end()){//1
+        (*it)->visited = false;//2
+        it++;
+    }
+    Vertex<T>* src = findVertex(source);
+    Vertex<T>*aux;
+    queue<Vertex<T>*> helper;//3
+    helper.push(src);//4
+    while(!helper.empty()){//5
+        aux = helper.front();//6
+        helper.pop();//6
+        res.push_back(aux->info);//7
+        for(auto a:aux->adj){//8
+            if(!(a.dest->visited)){//9
+                helper.push(a.dest);//10
+                a.dest->visited = true;//11
+            }
+        }
+    }
 
-	return res;
+	return res;//12
 }
 
 /****************** 2c) toposort ********************/
@@ -308,8 +328,74 @@ vector<T> Graph<T>::bfs(const T & source) const {
 template<class T>
 vector<T> Graph<T>::topsort() const {
 	// TODO (26 lines)
-	vector<T> res;
-	return res;
+	 /*1. for each vV do indegree(v)  0
+2. for each vV do for each wadj(v) do indegree(w)  indegree(w) + 1
+3. C  { } // Pode ser uma fila (Queue), pilha (Stack), etc.
+4. for each vV do if indegree(v) = 0 then C  C  {v}
+5. T  [ ] // Pode ser uma lista (LinkedList)
+6. while C  {} do
+7. v  remove-one(C)
+8. T  T concatenado-com [v]
+9. for each w  adj(v) do
+10. indegree(w)  indegree(w) – 1
+11. if indegree(w) = 0 then C  C  {w}
+12. if |T|  |V| then Fail(“O grafo tem ciclos”)*/
+    typename vector<Vertex<T> *>::const_iterator it = vertexSet.begin();//1
+    while (it != vertexSet.end()) {
+        (*it)->indegree = 0;
+        it++;
+    }
+
+    //2
+    it = vertexSet.begin();
+    while (it != vertexSet.end()) {
+        typename vector<Edge<T>>::const_iterator it2 = (*it)->adj.begin();
+        while (it2 != (*it)->adj.end()) {
+            (*it2).dest->indegree++;
+            it2++;
+        }
+        it++;
+    }
+
+
+    queue<Vertex<T>*> C;//3
+
+    // 4
+    it = vertexSet.begin();
+    while (it != vertexSet.end()) {
+        if ((*it)->indegree == 0)
+            C.push(*it);
+        it++;
+    }
+
+    //5
+    vector<T> res;
+    Vertex<T>* v;
+
+    //6
+    typename vector<Edge<T>>::const_iterator it2;
+    while (!C.empty()) {
+        //7
+        v = C.front();
+        C.pop();
+        res.push_back(v->info);//8
+
+        //9
+        it2 = v->adj.begin();
+        while (it2 != v->adj.end()) {
+            (*it2).dest->indegree--;//10
+            //11
+            if ((*it2).dest->indegree == 0)
+                C.push((*it2).dest);
+            it2++;
+        }
+    }
+
+    //12
+    if (res.size() != vertexSet.size())
+        res.clear();
+
+    return res;
 }
 
 /****************** 3a) maxNewChildren (HOME WORK)  ********************/
@@ -325,7 +411,41 @@ vector<T> Graph<T>::topsort() const {
 template <class T>
 int Graph<T>::maxNewChildren(const T & source, T &inf) const {
 	// TODO (28 lines, mostly reused)
-	return 0;
+    typename vector<Vertex<T> *>::const_iterator it = vertexSet.begin();
+
+    while (it != vertexSet.end()) {
+        (*it)->visited = false;
+        it++;
+    }
+
+    Vertex<T>* src = findVertex(source), *v;
+    inf = src->info;
+    queue<Vertex<T>*> Q;
+    Q.push(src);
+    typename vector<Edge<T>>::const_iterator it2;
+
+    int count, maxCount = 0;
+
+    while (!Q.empty()) {
+        v = Q.front();
+        Q.pop();
+        count = 0;
+        it2 = v->adj.begin();
+        while (it2 != v->adj.end()) {
+            if (!(*it2).dest->visited) {
+                count++;
+                Q.push((*it2).dest);
+                (*it2).dest->visited = true;
+            }
+            it2++;
+        }
+        if (count > maxCount) {
+            maxCount = count;
+            inf = v->info;
+        }
+    }
+
+    return maxCount;
 }
 
 /****************** 3b) isDAG   (HOME WORK)  ********************/
@@ -342,7 +462,22 @@ template <class T>
 bool Graph<T>::isDAG() const {
 	// TODO (9 lines, mostly reused)
 	// HINT: use the auxiliary field "processing" to mark the vertices in the stack.
-	return true;
+    typename vector<Vertex<T> *>::const_iterator it = vertexSet.begin();
+    while (it != vertexSet.end()) {
+        (*it)->processing = false;
+        it++;
+    }
+    it = vertexSet.begin();
+
+    while(it != vertexSet.end()) {
+        if (!(*it)->processing) {
+            if (!dfsIsDAG(*it))
+                return false;
+        }
+        it++;
+    }
+
+    return true;
 }
 
 /**
@@ -352,7 +487,19 @@ bool Graph<T>::isDAG() const {
 template <class T>
 bool Graph<T>::dfsIsDAG(Vertex<T> *v) const {
 	// TODO (12 lines, mostly reused)
-	return true;
+    v->processing = true;
+    typename vector<Edge<T>>::const_iterator it = v->adj.begin();
+    while (it != v->adj.end()) {
+        if (!(*it).dest->processing) {
+            if (!dfsIsDAG((*it).dest))
+                return false;
+            it++;
+        }
+        else
+            return false;
+    }
+    v->processing = false;
+    return true;
 }
 
 #endif /* GRAPH_H_ */
