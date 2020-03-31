@@ -3,7 +3,7 @@
  * A simple implementation of mutable priority queues, required by Dijkstra algorithm.
  *
  * Created on: 17/03/2018
- *      Author: João Pascoal Faria
+ *      Author: Joï¿½o Pascoal Faria
  */
 
 #ifndef SRC_MUTABLEPRIORITYQUEUE_H_
@@ -30,6 +30,7 @@ public:
 	T * extractMin();
 	void decreaseKey(T * x);
 	bool empty();
+    bool inQueue(T * x);
 };
 
 // Index calculations
@@ -47,6 +48,7 @@ template <class T>
 bool MutablePriorityQueue<T>::empty() {
 	return H.size() == 1;
 }
+
 
 template <class T>
 T* MutablePriorityQueue<T>::extractMin() {
@@ -100,6 +102,13 @@ template <class T>
 void MutablePriorityQueue<T>::set(unsigned i, T * x) {
 	H[i] = x;
 	x->queueIndex = i;
+}
+template<class T>
+bool MutablePriorityQueue<T>::inQueue(T * x) {
+    for (auto v : H)
+        if (v == x)
+            return true;
+    return false;
 }
 
 #endif /* SRC_MUTABLEPRIORITYQUEUE_H_ */
