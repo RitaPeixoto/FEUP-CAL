@@ -282,7 +282,8 @@ void Graph<T>::bellmanFordShortestPath(const T &orig) {
 	    vertex->path = NULL;
 	}
 
-	for(int i =0; i<vertexSet.size()-1; i++){
+	s->dist  = 0;
+	for(int i =1; i<vertexSet.size()-1; i++){
 	    for(auto vertex: vertexSet){
 	        for(Edge<T> edge: vertex->adj){
 	            if(edge.dest->dist > vertex->dist + edge.weight){
