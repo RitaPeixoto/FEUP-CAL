@@ -100,7 +100,8 @@ Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w) {}
 template <class T>
 class Graph {
 	vector<Vertex<T> *> vertexSet;    // vertex set
-
+    vector<vector<double>> d;
+    vector<vector<Vertex<T>*>> p;
 public:
 	Vertex<T> *findVertex(const T &in) const;
 	bool addVertex(const T &in);
@@ -326,12 +327,72 @@ vector<T> Graph<T>::getPathTo(const T &dest) const{
 template<class T>
 void Graph<T>::floydWarshallShortestPath() {
 	// TODO
+    d.clear();
+	p.clear();
+    d = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
+    p = vector<vector<Vertex<T>*>>(vertexSet.size(), vector<Vertex<T>*>(vertexSet.size(), NULL));
+
+    int i =0, j=0;
+	for(auto aux_1: vertexSet){
+	    for(auto aux_2: vertexSet) {
+            if (i == j)
+                d[i][j] = 0;//a distancia de um vertice a si proprio é 0
+            else {
+                for (Edge<T> edge: aux_1->adj) {
+                    if (edge.dest->info == aux_2->info) {
+                        d[i][j] = edge.weight;
+                        p[i][j] = aux_1;
+                    }
+
+                }
+            }
+            j++;
+        }
+        i++;
+        j = 0;
+	}
+
+    for(int k=0; k<vertexSet.size();k++){
+	    int i=0,j=0;
+        for(auto aux_1: vertexSet){
+            for(auto aux_2: vertexSet){
+                if(d[i][k]+d[k][j]<d[i][j]){
+                    d[i][j] = d[i][k]+d[k][j];
+                    p[i][j] = p[k][j];
+                }
+                j++;
+            }
+            i++;
+            j = 0;
+        }
+	}
 }
 
 template<class T>
 vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
 	vector<T> res;
 	// TODO
+	int s_index, d_index;
+
+	for(int i =0; i<vertexSet.size();i++){
+	    if(vertexSet.at(i)->info == orig)
+	        s_index = i;
+	    else if(vertexSet.at(i)->info==dest)
+	        d_index = i;
+	}
+
+	while(p[s_index][d_index]!= vertexSet[s_index]){
+	    res.emplace(res.begin(),p[s_index][d_index]->info);
+	    for(int i=0;i<vertexSet.size();i++){
+	        if(vertexSet.at(i)->info == p[s_index][d_index]->info){
+	            d_index = i;
+	            break;
+	        }
+	    }
+	}
+	res.push_back(dest);
+	res.insert(res.begin(),orig);
+
 	return res;
 }
 

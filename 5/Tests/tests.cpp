@@ -159,8 +159,7 @@ TEST(CAL_FP05, test_bellmanFord) {
 }
 
 
-
-/* //Uncomment the test below...
+ //Uncomment the test below...
 TEST(CAL_FP05, test_floydWarshall) {
     Graph<int> myGraph = CreateTestGraph();
     myGraph.floydWarshallShortestPath();
@@ -168,5 +167,4 @@ TEST(CAL_FP05, test_floydWarshall) {
     checkSinglePath(myGraph.getfloydWarshallPath(5, 6), "5 7 6 ");
     checkSinglePath(myGraph.getfloydWarshallPath(7, 1), "7 6 4 3 1 ");
 }
-*/
 
