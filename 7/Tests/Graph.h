@@ -367,6 +367,8 @@ vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
 template <class T>
 bool Graph<T>::addBidirectionalEdge(const T &sourc, const T &dest, double w) {
     // TODO
+    this->addEdge(sourc,dest,w);
+    this->addEdge(dest,sourc,w);
     return false;
 }
 
@@ -375,7 +377,23 @@ bool Graph<T>::addBidirectionalEdge(const T &sourc, const T &dest, double w) {
 template <class T>
 vector<Vertex<T>* > Graph<T>::calculatePrim() {
 	// TODO
-	return vertexSet;
+	//copy-paste from dijkstra only changes the origin
+    auto s = initSingleSource(vertexSet.at(0)->getInfo());
+    MutablePriorityQueue<Vertex<T>> q;
+    q.insert(s);
+    while( ! q.empty() ) {
+        auto v = q.extractMin();
+        for(auto e : v->adj) {
+            auto oldDist = e.dest->dist;
+            if (relax(v, e.dest, e.weight)) {
+                if (oldDist == INF)
+                    q.insert(e.dest);
+                else
+                    q.decreaseKey(e.dest);
+            }
+        }
+    }
+    return vertexSet;
 }
 
 
