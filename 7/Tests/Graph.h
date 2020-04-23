@@ -29,7 +29,7 @@ class Vertex {
 	double dist = 0;
 	Vertex<T> *path = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
-
+    Vertex<T> *parent = nullptr;
 	void addEdge(Vertex<T> *dest, double w);
 
 
@@ -395,15 +395,64 @@ vector<Vertex<T>* > Graph<T>::calculatePrim() {
     }
     return vertexSet;
 }
+template <class T>
+bool checkCycle(T &u, T &v) {
+    Vertex<T>* aux = findVertex(u);
+    Vertex<T>* aux_2 = findVertex(v);
 
+    //check if it is a cycle
+
+}
 
 
 template <class T>
 vector<Vertex<T>*> Graph<T>::calculateKruskal() {
 	// TODO
+    int edgesAccepted = 0;
+    priority_queue<Edge<T>> h;
+    //1
+    for(Vertex<T>* v: vertexSet){
+        v->parent = v;
+        for(Edge<T> e: v->adj){
+            h.push(e);
+        }
+    }
+    while(edgesAccepted< getNumVertex()-1){//condition of 3
+        //2
+        Edge<T> e = h.top();
+        h.pop();// smallest edge
+        T u = (e.orig)->getInfo();
+        T v = (e.dest)->getInfo();
+        if(!checkCyle(u,v)){//cycle is not formed
+            edgesAccepted ++;
+            //include the edge
+            (e.dest)->parent = (e.orig)->parent;
+            (e.dest)->path = (e.orig);
+        }
+    }
+
 	return vertexSet;
 }
 
+/*void kruskal() {
+    int edgesAccepted = 0;
+    PriorityQueue<Edge> h = readGraphIntoHeapArray();
+    h.buildHeap();
+    DisjSet<Vertex> s = new DisjSet(NUM_VERTICES);
+    while(edgesAccepted < NUM_VERTICES -1 ) {
+        Edge e = h.deleteMin(); // e = (u,v)
+        SetType uset = s.find(u);
+        SetType vset = s.find(v);
+        if (uset != vset) {
+            edgesAccepted++;
+            s.union(uset, vset);
+        }
+    }
+}
+1. Sort all the edges in non-decreasing order of their weight.
+2. Pick the smallest edge. Check if it forms a cycle with the spanning tree formed so far. If cycle is not formed, include this edge. Else, discard it.
+3. Repeat step#2 until there are (V-1) edges in the spanning tree.
+*/
 
 
 #endif /* GRAPH_H_ */
