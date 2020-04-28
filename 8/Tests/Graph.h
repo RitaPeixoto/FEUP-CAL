@@ -109,7 +109,11 @@ public:
 	Vertex<T> *addVertex(const T &in);
 	Edge<T> *addEdge(const T &sourc, const T &dest, double c, double f=0);
 	void fordFulkerson(T source, T target);
-
+	void ResetFlows();
+    bool FindAugmentationPath(Vertex<T> * source, Vertex<T> * target);
+    void TestAndVisit(queue<Vertex<T>*>* Q, Edge<T>* e, Vertex<T>* w, double residual);
+    double FindMinResidualAlongPath(Vertex<T>* source, Vertex<T>* target);
+    void AugumentFlowAlongPath(Vertex<T>* source, Vertex<T>* target, double f);
 };
 
 template <class T>
@@ -155,8 +159,96 @@ vector<Vertex<T> *> Graph<T>::getVertexSet() const {
  * The result is defined by the "flow" field of each edge.
  */
 template <class T>
+void Graph<T>::TestAndVisit(queue<Vertex<T>*>* Q, Edge<T>* e, Vertex<T>* w, double residual){
+    if(!w->visited && residual>0){
+        w->visited=true;
+        w->path=e; // previous edge in shortest path
+        Q->push(w);
+    }
+}
+template <class T>
+bool Graph<T>:: FindAugmentationPath(Vertex<T> * source, Vertex<T> * target){ // Edmonds-Karp (breadth-first)
+    for(Vertex<T>* v: getVertexSet()){
+        v->visited= false;
+    }
+    source->visited = true;
+
+    Vertex<T>*v;
+    queue<Vertex<T>*> q;
+    q.push(source);
+
+    while(!q.empty()&& !target->visited){
+        v=q.front();
+        q.pop();
+        for(Edge<T>* e: v->outgoing){ // direct residual edges
+            TestAndVisit(&q, e, e->dest, e->capacity - e->flow);
+        }
+        for(Edge<T>* e: v->incoming){ // reverse residual edges
+            TestAndVisit(&q,e,e->orig,e->flow);
+        }
+    }
+    return  target->visited;
+}
+
+template <class T>
+double Graph<T>::FindMinResidualAlongPath(Vertex<T>* source, Vertex<T>* target){
+    double f = INT_MAX;
+    Vertex<T>* v= target;
+
+    while(v!=source){
+        Edge<T> * e = v->path;
+
+        if(e->dest == v){// direct residual edge
+            f = min(f, e->capacity - e->flow);
+            v= e->orig;
+        }
+        else{// reverse residual edge
+            f = min(f, e->flow);
+            v = e->dest;
+        }
+    }
+    return f;
+}
+template <class T>
+void Graph<T>::AugumentFlowAlongPath(Vertex<T>* source, Vertex<T>* target, double f){
+    Vertex<T>* v = target;
+    while(v!=source){
+        Edge<T> * e = v->path;
+        if(e->dest == v){ // direct residual edge
+            e->flow += f;
+            v = e->orig;
+        }
+        else{// reverse residual edge
+            e->flow -=  f;
+            v = e->dest;
+        }
+    }
+}
+
+
+template <class T>
+void Graph<T>::ResetFlows(){
+        for (Vertex<T> * v : vertexSet){
+            for (Edge<T> * e : v->outgoing){
+                e->flow = 0;
+            }
+        }
+}
+
+template <class T>
 void Graph<T>::fordFulkerson(T source, T target) {
     // TODO
+    Vertex<T>* s = findVertex(source);
+    Vertex<T>* t = findVertex(target);
+
+    ResetFlows();
+    int f, maxF=0;
+    while(FindAugmentationPath(s,t)){
+        f = FindMinResidualAlongPath(s,t);
+        AugumentFlowAlongPath(s,t,f);
+        maxF += f;
+        cout << "Max Flow = " << maxF << endl;
+    }
 }
 
 
