@@ -8,7 +8,7 @@ TourMateApp : rotas turísticas urbanas adaptáveis
 |-----------------------|-------|
 | Parte II (75%)        | 18.10 |
 | Nota final do Projeto | 17.55 | 
-|                       |       |
+
 
 ## Projeto realizado com:
 
