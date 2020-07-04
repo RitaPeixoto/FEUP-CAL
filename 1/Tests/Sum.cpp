@@ -51,3 +51,21 @@ pair<int,int> sumMin(int *sequence, int n, int size){
     return make_pair(sum, index);
 }
 
+void testPerformanceCalcSum()
+{
+    srand(time(NULL)); //generates random seed
+    int seq[1+1000];
+    cout << "size; time" << endl;
+    for (int size = 10; size <= 500; size += 10) {
+        auto start = std::chrono::high_resolution_clock::now();
+        for (int k = 0; k < 1000; k++) {
+            for (int i = 0; i <size; i++)
+                seq[i]= rand() % (10 * size) + 1;
+            string res = calcSum(seq, size);
+        }
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto elapsed = chrono::duration_cast<chrono::milliseconds>(finish -
+                                                                   start).count();
+        cout << size << ";" << elapsed << endl;
+    }
+}

@@ -179,7 +179,6 @@ void Sudoku::print()
 	{
 		for (int a = 0; a < 9; a++)
 			cout << this->numbers[i][a] << " ";
-
 		cout << endl;
 	}
 }

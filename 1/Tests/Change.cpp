@@ -32,12 +32,12 @@ string calcChange(int m, int numCoins, int *coinValues) {
             // não entra no if, a moeda não serve, então não mudam os arrays
         }
     }
-
+// produce string with the result
     string output = "";
     int temp = m;
 
     if (minCoins[m] == 0)
-        return "-";
+        return "-"; // no solution
 
     for (int i = 0; i < minCoins[m]; i++) {
         output += to_string(lastCoin[temp]) + ";";
@@ -46,6 +46,7 @@ string calcChange(int m, int numCoins, int *coinValues) {
 
     return output;
 }
+
 /*    if(numCoins==0 || m==0){//if there are no coins or the change is 0
         return "";
     }

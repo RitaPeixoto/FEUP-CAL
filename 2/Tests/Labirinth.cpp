@@ -105,7 +105,36 @@ bool Labirinth::findGoal(int x, int y)
     visited[x][y]=true;
 	return false;
 }
+/*
+T(n)=O(n2) no pior caso, em que n é dimensão do labirinto (neste caso n=10), pois cada célula só
+é visitada no máximo uma vez.
 
+ */
 
-/*alinea b
- * n^2 */
+//outra resoluçao do find goal
+/*bool Labirinth::findGoal(int x, int y)
+{
+initializeVisited();
+return findGoalRec(x,y);
+}
+// Auxiliary recursive function
+bool Labirinth::findGoalRec(int x, int y)
+{
+// Check if this position is worth visiting (limits checking could
+// be omitted because the labyrinth is surrounded by walls)
+if (x < 0 || y < 0 || x >= 10 || x >= 10
+|| labirinth[y][x] == 0 || visited[y][x])
+return false;
+// Mark as visited
+visited[y][x] = true;
+// Check if the exit was reached
+if (labirinth[y][x] == 2) {
+cout << ": Reached the goal!" << endl;
+return true;
+}
+// Try all the adjacent cells
+return findGoalRec(x-1, y) || findGoalRec(x+1, y)
+|| findGoalRec(x, y-1) || findGoalRec(x, y+1);
+}
+
+ */
