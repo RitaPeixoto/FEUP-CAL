@@ -1,0 +1,10 @@
+9
+(1969, 'Hospital Sao Joao', 1)
+(11276, 'IPO', 2)
+(14518, 'Salgueiros', 4)
+(19547, 'Combatentes', 5)
+(43548, 'Marques', 6)
+(38444, 'Faria Guimaraes', 7)
+(27817, 'Aliados', 8)
+(29426, 'S. Bento', 9)  
+(11276, 'Polo Universitario', 3)
