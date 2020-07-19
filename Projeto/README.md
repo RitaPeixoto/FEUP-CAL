@@ -13,6 +13,6 @@ TourMateApp : rotas turísticas urbanas adaptáveis
 
 ## Projeto realizado com:
 
- * Mariana Truta
+ * Mariana Truta (@mariana1412)
 
- * Inês Silva
+ * Inês Silva (@reluzita)
